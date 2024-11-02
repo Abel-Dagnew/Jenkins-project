@@ -13,6 +13,8 @@ pipeline {
             steps {
                 script {
                     echo 'Initializing Terraform...'
+                    // Check current PATH
+                    echo "Current PATH: ${env.PATH}" // Output the current PATH
                     sh 'terraform init' // Make sure terraform is installed in PATH
                 }
             }
@@ -22,6 +24,7 @@ pipeline {
             steps {
                 script {
                     echo 'Running Terraform Plan...'
+                    // Provide feedback on the plan process
                     sh 'terraform plan -target=module.Create_App_Service'
                 }
             }
@@ -31,6 +34,7 @@ pipeline {
             steps {
                 script {
                     echo 'Applying Terraform Configuration...'
+                    // Provide feedback before applying
                     sh 'terraform apply -target=module.Create_App_Service -auto-approve'
                 }
             }
@@ -46,7 +50,7 @@ pipeline {
             echo 'Terraform Apply completed successfully!'
         }
         failure {
-            echo 'Terraform Apply failed.'
+            echo 'Terraform Apply failed. Please check the logs for errors.'
         }
     }
 }
