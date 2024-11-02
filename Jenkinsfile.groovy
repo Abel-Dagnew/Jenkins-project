@@ -22,7 +22,7 @@ pipeline {
             steps {
                 script {
                     echo 'Running Terraform Plan...'
-                    sh 'terraform plan -target=module.Create_App_Service '
+                    sh 'terraform plan -target=module.Create_App_Service'
                 }
             }
         }
@@ -31,7 +31,7 @@ pipeline {
             steps {
                 script {
                     echo 'Applying Terraform Configuration...'
-                    sh 'terraform apply -target=module.Create_App_Service  -auto-approve'
+                    sh 'terraform apply -target=module.Create_App_Service -auto-approve'
                 }
             }
         }
@@ -39,10 +39,8 @@ pipeline {
     
     post {
         always {
-            
-            node { // Ensure this is inside a node block
-                echo 'Cleaning up workspace...'
-                deleteDir()
+            echo 'Cleaning up workspace...'
+            deleteDir()
         }
         success {
             echo 'Terraform Apply completed successfully!'
@@ -51,5 +49,4 @@ pipeline {
             echo 'Terraform Apply failed.'
         }
     }
-}
 }
