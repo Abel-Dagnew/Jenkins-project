@@ -39,8 +39,10 @@ pipeline {
     
     post {
         always {
-            echo 'Cleaning up workspace...'
-            deleteDir()
+            
+            node { // Ensure this is inside a node block
+                echo 'Cleaning up workspace...'
+                deleteDir()
         }
         success {
             echo 'Terraform Apply completed successfully!'
@@ -49,4 +51,5 @@ pipeline {
             echo 'Terraform Apply failed.'
         }
     }
+}
 }
