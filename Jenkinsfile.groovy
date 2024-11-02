@@ -9,6 +9,29 @@ pipeline {
     }
     
     stages {
+        stage('Install Terraform') {
+            steps {
+                script {
+                    // For Linux systems (Ubuntu)
+                    echo 'Installing Terraform on Linux...'
+                    sh '''
+                        sudo apt-get update
+                        sudo apt-get install -y unzip curl jq
+                        # Download the latest version of Terraform
+                        curl -LO https://releases.hashicorp.com/terraform/$(curl -s https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r .current_version)/terraform_$(curl -s https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r .current_version)_linux_amd64.zip
+                        # Unzip and move to a directory in the PATH
+                        unzip terraform_*_linux_amd64.zip
+                        sudo mv terraform /usr/local/bin/
+                        # Clean up downloaded files
+                        rm terraform_*_linux_amd64.zip
+                    '''
+                    
+                    // Verify installation
+                    sh 'terraform -version'
+                }
+            }
+        }
+
         stage('Terraform Init') {
             steps {
                 script {
