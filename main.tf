@@ -19,8 +19,15 @@ module "Create_App_Service" {
   }
      
 }
-
-
+module "Create_container_registry" {
+  
+  source = "./Create_container_registry"
+  providers = {
+    azurerm = azurerm.azresourceprovider
+  }
+     
+}
+Create_container_registry
 
 
 

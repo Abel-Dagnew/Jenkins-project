@@ -25,7 +25,7 @@ pipeline {
                 script {
                     echo 'Running Terraform Plan...'
                     // Provide feedback on the plan process
-                    sh 'terraform plan -target=module.Create_App_Service'
+                    sh 'terraform plan -target=module.Create_container_registry'
                 }
             }
         }
@@ -35,7 +35,7 @@ pipeline {
                 script {
                     echo 'Applying Terraform Configuration...'
                     // Provide feedback before applying
-                    sh 'terraform apply -target=module.Create_App_Service -auto-approve'
+                    sh 'terraform apply -target=module.Create_container_registry -auto-approve'
                 }
             }
         }
