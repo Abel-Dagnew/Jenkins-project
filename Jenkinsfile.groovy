@@ -10,27 +10,39 @@ pipeline {
         GITHUB_REPO = "https://github.com/Abel-Dagnew/Jenkins-project.git"  // GitHub repository URL
     }
     stages {
-        stage('Checkout Code') {
-            steps {
-                // Clone the GitHub repository
-                git url: "${GITHUB_REPO}", branch: 'main'
-            }
-        }
-        //docker build
-        stage('Build Docker Image') {
+        stage('Login to Azure') {
             steps {
                 script {
-                    // Build the Docker image from the Dockerfile in the repository
-                    sh 'docker build -t ${ACR_LOGIN_SERVER}/${DOCKER_IMAGE_NAME}:latest .'
+                    // Use Azure CLI to login to Azure using Service Principal credentials
+                    withCredentials([azureServicePrincipal(credentialsId: 'azure-service-principal-id')]) {
+                        // Logging in to Azure with Service Principal credentials
+                        sh '''
+                            az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+                            az account set --subscription $AZURE_SUBSCRIPTION_ID
+                        '''
+                    }
                 }
             }
         }
-        
-        stage('Login to Azure Container Registry') {
+
+        stage('Login to ACR') {
             steps {
                 script {
-                    // Login to Azure Container Registry using the username and password
-                    sh 'docker login ${ACR_LOGIN_SERVER} -u ${ACR_USERNAME} -p ${ACR_PASSWORD}'
+                    // Log in to Azure Container Registry using Azure CLI
+                    sh '''
+                        az acr login --name ${ACR_LOGIN_SERVER}
+                    '''
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Build the Docker image and tag it with the ACR repository
+                    sh '''
+                        docker build -t ${ACR_LOGIN_SERVER}/${ACR_REPOSITORY}/${DOCKER_IMAGE_NAME}:latest .
+                    '''
                 }
             }
         }
@@ -38,16 +50,18 @@ pipeline {
         stage('Push Docker Image to ACR') {
             steps {
                 script {
-                    // Push the Docker image to ACR
-                    sh 'docker push ${ACR_LOGIN_SERVER}/${DOCKER_IMAGE_NAME}:latest'
+                    // Push the Docker image to Azure Container Registry
+                    sh '''
+                        docker push ${ACR_LOGIN_SERVER}/${ACR_REPOSITORY}/${DOCKER_IMAGE_NAME}:latest
+                    '''
                 }
             }
         }
     }
+
     post {
         always {
-            // Clean up Docker images
-            sh 'docker rmi ${ACR_LOGIN_SERVER}/${DOCKER_IMAGE_NAME}:latest'
+            cleanWs()  // Clean up workspace after the job
         }
     }
 }
