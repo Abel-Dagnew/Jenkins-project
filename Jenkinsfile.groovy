@@ -5,21 +5,22 @@ pipeline {
         ACR_NAME = "abelregistryy"  // Your ACR name
         ACR_LOGIN_SERVER = "${ACR_NAME}.azurecr.io"  // ACR login server URL
         ACR_USERNAME = "abelregistryy"  // ACR username
-        ACR_PASSWORD = credentials('ACR_Pass')  // ACR password
+        ACR_PASSWORD = credentials('ACR_Pass')  // ACR password stored in Jenkins credentials
         DOCKER_IMAGE_NAME = "Abelimage1st"  // Name of your Docker image
         GITHUB_REPO = "https://github.com/Abel-Dagnew/Jenkins-project.git"  // GitHub repository URL
-        AZURE_CLIENT_ID       = credentials('ARM_CLIENT_ID')
-        AZURE_CLIENT_SECRET   = credentials('ARM_CLIENT_SECRET')
-        AZURE_TENANT_ID       = credentials('ARM_TENANT_ID')
-        AZURE_SUBSCRIPTION_ID = credentials('ARM_SUBSCRIPTION_ID')
     }
     stages {
         stage('Login to Azure') {
             steps {
                 script {
-                    // Use Azure CLI to login to Azure using Service Principal credentials
-                    withCredentials([azureServicePrincipal(credentialsId: 'azure-service-principal-id')]) {
-                        // Logging in to Azure with Service Principal credentials
+                    // Use withCredentials to inject the Azure Service Principal credentials
+                    withCredentials([
+                        string(credentialsId: 'ARM_CLIENT_ID', variable: 'AZURE_CLIENT_ID'),
+                        string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'AZURE_CLIENT_SECRET'),
+                        string(credentialsId: 'ARM_TENANT_ID', variable: 'AZURE_TENANT_ID'),
+                        string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'AZURE_SUBSCRIPTION_ID')
+                    ]) {
+                        // Logging in to Azure using the Service Principal credentials
                         sh '''
                             az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
                             az account set --subscription $AZURE_SUBSCRIPTION_ID
@@ -34,7 +35,7 @@ pipeline {
                 script {
                     // Log in to Azure Container Registry using Azure CLI
                     sh '''
-                        az acr login --name ${ACR_LOGIN_SERVER}
+                        az acr login --name ${ACR_NAME}
                     '''
                 }
             }
