@@ -8,6 +8,10 @@ pipeline {
         ACR_PASSWORD = credentials('ACR_Pass')  // ACR password
         DOCKER_IMAGE_NAME = "Abelimage1st"  // Name of your Docker image
         GITHUB_REPO = "https://github.com/Abel-Dagnew/Jenkins-project.git"  // GitHub repository URL
+        AZURE_CLIENT_ID       = credentials('ARM_CLIENT_ID')
+        AZURE_CLIENT_SECRET   = credentials('ARM_CLIENT_SECRET')
+        AZURE_TENANT_ID       = credentials('ARM_TENANT_ID')
+        AZURE_SUBSCRIPTION_ID = credentials('ARM_SUBSCRIPTION_ID')
     }
     stages {
         stage('Login to Azure') {
@@ -41,7 +45,7 @@ pipeline {
                 script {
                     // Build the Docker image and tag it with the ACR repository
                     sh '''
-                        docker build -t ${ACR_LOGIN_SERVER}/${ACR_REPOSITORY}/${DOCKER_IMAGE_NAME}:latest .
+                        docker build -t ${ACR_LOGIN_SERVER}/${DOCKER_IMAGE_NAME}:latest .
                     '''
                 }
             }
@@ -52,7 +56,7 @@ pipeline {
                 script {
                     // Push the Docker image to Azure Container Registry
                     sh '''
-                        docker push ${ACR_LOGIN_SERVER}/${ACR_REPOSITORY}/${DOCKER_IMAGE_NAME}:latest
+                        docker push ${ACR_LOGIN_SERVER}/${DOCKER_IMAGE_NAME}:latest
                     '''
                 }
             }
