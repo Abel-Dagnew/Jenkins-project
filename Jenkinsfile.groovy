@@ -9,8 +9,8 @@ pipeline {
         ACR_PASSWORD = credentials('ACR_Pass')  // ACR password stored in Jenkins credentials
         DOCKER_IMAGE_NAME = "Abelimage1st"  // Name of your Docker image
         GITHUB_REPO = "https://github.com/Abel-Dagnew/Jenkins-project.git"  // GitHub repository URL
-        DOCKER_CREDENTIALS_ID = credentials('c3c94d98-85b5-49e7-b6fd-9d1f6f6838ea')
-        DOCKER_HUB_REPO = "mydocker-repo"
+        DOCKER_CREDENTIALS_ID = credentials('f4f417f6-51e4-4edb-b681-4e5c0e0a426d')
+        DOCKER_HUB_REPO = "abel13"
     }
     stages {
         stage('Login to Azure') {
