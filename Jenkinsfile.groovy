@@ -35,7 +35,7 @@ pipeline {
                 script {
                     // Log in to Azure Container Registry using Azure CLI
                     sh '''
-                        az acr login --name ${ACR_NAME}
+                        az acr login --name ${ACR_LOGIN_SERVER}
                     '''
                 }
             }
