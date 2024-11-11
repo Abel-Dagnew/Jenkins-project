@@ -16,7 +16,7 @@ pipeline {
                 git url: "${GITHUB_REPO}", branch: 'main'
             }
         }
-        
+        //docker build
         stage('Build Docker Image') {
             steps {
                 script {
