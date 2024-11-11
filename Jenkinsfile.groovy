@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    
+
     environment {
         // Azure container registry details
         ACR_NAME = "abelregistryy"  // Your ACR name
@@ -47,9 +47,11 @@ pipeline {
         stage('Docker Login') {
             steps {
                 script {
-                    withCredentials([string(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", variable: 'DOCKER_PAT')]) {
-                        sh "echo \$DOCKER_PAT | docker login -u ${env.DOCKER_HUB_REPO} --password-stdin"
-                    }
+                    
+                    // Log in to Azure Container Registry using username and password
+                    sh '''
+                        echo ${ACDOCKER_CREDENTIALS_ID} | docker login --username ${DOCKER_HUB_REPO} --password-stdin
+                    '''
                 }
             }
         }
