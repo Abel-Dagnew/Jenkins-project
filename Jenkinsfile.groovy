@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'docker:stable'   // Use Docker's official image with Docker CLI installed
+            args '-v /var/run/docker.sock:/var/run/docker.sock'   // Mount Docker socket for communication
+        }
+    }
     environment {
         // Azure container registry details
         ACR_NAME = "abelregistryy"  // Your ACR name
@@ -8,6 +13,7 @@ pipeline {
         ACR_PASSWORD = credentials('ACR_Pass')  // ACR password stored in Jenkins credentials
         DOCKER_IMAGE_NAME = "Abelimage1st"  // Name of your Docker image
         GITHUB_REPO = "https://github.com/Abel-Dagnew/Jenkins-project.git"  // GitHub repository URL
+        DOCKER_CREDENTIALS_ID = credentials('c3c94d98-85b5-49e7-b6fd-9d1f6f6838ea')
     }
     stages {
         stage('Login to Azure') {
