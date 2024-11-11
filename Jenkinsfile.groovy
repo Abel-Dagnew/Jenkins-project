@@ -1,6 +1,6 @@
 pipeline {
     agent any
-
+    
     environment {
         // Azure container registry details
         ACR_NAME = "abelregistryy"  // Your ACR name
@@ -10,7 +10,7 @@ pipeline {
         DOCKER_IMAGE_NAME = "Abelimage1st"  // Name of your Docker image
         GITHUB_REPO = "https://github.com/Abel-Dagnew/Jenkins-project.git"  // GitHub repository URL
         DOCKER_CREDENTIALS_ID = credentials('c3c94d98-85b5-49e7-b6fd-9d1f6f6838ea')
-        DOCKER_HUB_REPO = "abel13"
+        DOCKER_HUB_REPO = "mydocker-repo"
     }
     stages {
         stage('Login to Azure') {
@@ -47,11 +47,9 @@ pipeline {
         stage('Docker Login') {
             steps {
                 script {
-                    
-                    // Log in to Azure Container Registry using username and password
-                    sh '''
-                        echo ${ACDOCKER_CREDENTIALS_ID} | docker login --username ${DOCKER_HUB_REPO} --password-stdin
-                    '''
+                    withCredentials([string(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", variable: 'DOCKER_PAT')]) {
+                        sh "echo \$DOCKER_PAT | docker login -u ${env.DOCKER_HUB_REPO} --password-stdin"
+                    }
                 }
             }
         }
