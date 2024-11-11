@@ -14,6 +14,7 @@ pipeline {
         DOCKER_IMAGE_NAME = "Abelimage1st"  // Name of your Docker image
         GITHUB_REPO = "https://github.com/Abel-Dagnew/Jenkins-project.git"  // GitHub repository URL
         DOCKER_CREDENTIALS_ID = credentials('c3c94d98-85b5-49e7-b6fd-9d1f6f6838ea')
+        DOCKER_HUB_REPO = "abel13"
     }
     stages {
         stage('Login to Azure') {
@@ -47,13 +48,19 @@ pipeline {
             }
         }
 
+        stage('Docker Login') {
+            steps {
+                script {
+                    withCredentials([string(credentialsId: "${env.DOCKER_CREDENTIALS_ID}", variable: 'DOCKER_PAT')]) {
+                        sh "echo \$DOCKER_PAT | docker login -u ${env.DOCKER_HUB_REPO} --password-stdin"
+                    }
+                }
+            }
+        }
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build the Docker image and tag it with the ACR repository
-                    sh '''
-                        docker build -t ${ACR_LOGIN_SERVER}/${DOCKER_IMAGE_NAME}:latest .
-                    '''
+                    sh "docker build -t ${DOCKER_HUB_REPO}/${DOCKER_IMAGE_NAME}:latest ."
                 }
             }
         }
