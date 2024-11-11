@@ -1,10 +1,6 @@
 pipeline {
-    agent {
-        docker {
-            image 'docker:stable'   // Use Docker's official image with Docker CLI installed
-            args '-v /var/run/docker.sock:/var/run/docker.sock'   // Mount Docker socket for communication
-        }
-    }
+    agent any
+    
     environment {
         // Azure container registry details
         ACR_NAME = "abelregistryy"  // Your ACR name
