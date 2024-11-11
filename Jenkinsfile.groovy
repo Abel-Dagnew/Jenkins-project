@@ -14,7 +14,7 @@ pipeline {
             steps {
                 script {
                     // Use withCredentials to inject the Azure Service Principal credentials
-                    withCredentials([
+                    withCredentials([ 
                         string(credentialsId: 'ARM_CLIENT_ID', variable: 'AZURE_CLIENT_ID'),
                         string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'AZURE_CLIENT_SECRET'),
                         string(credentialsId: 'ARM_TENANT_ID', variable: 'AZURE_TENANT_ID'),
@@ -33,9 +33,9 @@ pipeline {
         stage('Login to ACR') {
             steps {
                 script {
-                    // Log in to Azure Container Registry using Azure CLI
+                    // Log in to Azure Container Registry using username and password
                     sh '''
-                        az acr login --name ${ACR_LOGIN_SERVER}
+                        echo ${ACR_PASSWORD} | docker login ${ACR_LOGIN_SERVER} --username ${ACR_USERNAME} --password-stdin
                     '''
                 }
             }
