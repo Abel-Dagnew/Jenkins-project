@@ -50,7 +50,7 @@ pipeline {
                 script {
                     
                      sh '''
-                         sh 'echo $DOCKER_PASSWORD | docker login --username ${DOCKER_USERNAME} --password-stdin'
+                         sh 'echo ${DOCKER_CREDENTIALS_ID} | docker login --username ${DOCKER_USERNAME} --password-stdin'
                     '''
                 }
             }
