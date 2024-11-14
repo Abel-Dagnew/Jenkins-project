@@ -9,8 +9,8 @@ pipeline {
         ACR_PASSWORD = credentials('ACR_Pass')  // ACR password stored in Jenkins credentials
         DOCKER_IMAGE_NAME = "Abelimage1st"  // Name of your Docker image
         GITHUB_REPO = "https://github.com/Abel-Dagnew/Jenkins-project.git"  // GitHub repository URL
-        DOCKER_CREDENTIALS_ID = credentials('c3c94d98-85b5-49e7-b6fd-9d1f6f6838ea')
-        DOCKER_HUB_REPO = "abel13"
+        DOCKER_CREDENTIALS_ID = credentials('Docker_PAT')
+        DOCKER_USERNAME = "abel13"
     }
     stages {
         stage('Login to Azure') {
@@ -48,16 +48,17 @@ pipeline {
         stage('Docker Login') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
-                    }
+                    
+                     sh '''
+                         sh 'echo $DOCKER_PASSWORD | docker login --username ${DOCKER_USERNAME} --password-stdin'
+                    '''
                 }
             }
         }
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh "docker build -t ${DOCKER_HUB_REPO}/${DOCKER_IMAGE_NAME}:latest ."
+                    sh "docker build -t ${DOCKER_USERNAME}/${DOCKER_IMAGE_NAME}:latest ."
                 }
             }
         }
