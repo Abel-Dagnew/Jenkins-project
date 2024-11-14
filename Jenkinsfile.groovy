@@ -45,21 +45,10 @@ pipeline {
             }
         }
 
-        stage('Docker Login') {
-            steps {
-                script {
-                    // Use withCredentials to inject the Docker Personal Access Token
-                    withCredentials([string(credentialsId: 'Docker_PAT', variable: 'DOCKER_PASSWORD')]) {
-                        sh "echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin"
-                    }
-                }
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh "docker build -t ${DOCKER_USERNAME}/${DOCKER_IMAGE_NAME}:latest ."
+                    sh "docker build -t ${ACR_NAME}/${DOCKER_IMAGE_NAME}:latest ."
                 }
             }
         }
@@ -77,7 +66,7 @@ pipeline {
             steps {
                 script {
                     // Tag the image for Azure Container Registry
-                    sh "docker tag ${DOCKER_USERNAME}/${DOCKER_IMAGE_NAME}:latest ${ACR_LOGIN_SERVER}/${DOCKER_IMAGE_NAME}:latest"
+                    sh "docker tag ${ACR_NAME}/${DOCKER_IMAGE_NAME}:latest ${ACR_LOGIN_SERVER}/${DOCKER_IMAGE_NAME}:latest"
                 }
             }
         }
