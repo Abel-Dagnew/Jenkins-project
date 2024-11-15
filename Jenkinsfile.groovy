@@ -11,6 +11,8 @@ pipeline {
         GITHUB_REPO = "https://github.com/Abel-Dagnew/Jenkins-project.git"  // GitHub repository URL
         DOCKER_CREDENTIALS_ID = credentials('Docker_PAT')
         DOCKER_USERNAME = "abel13"
+        AZURE_WEB_APP_NAME = "Abel-Container234" // Azure Web App name
+        AZURE_RESOURCE_GROUP = "Abel-Container234_group" // Azure Resource Group where Web App resides
     }
 
     stages {
@@ -77,6 +79,22 @@ pipeline {
                     // Push the Docker image to Azure Container Registry
                     sh '''
                         docker push ${ACR_LOGIN_SERVER}/${DOCKER_IMAGE_NAME}:latest
+                    '''
+                }
+            }
+        }
+        
+        stage('Pull Image to Web App') {
+            steps {
+                script {
+                    // Configure Azure Web App to use the latest image from ACR
+                    sh '''
+                        az webapp config container set --name ${AZURE_WEB_APP_NAME} \
+                        --resource-group ${AZURE_RESOURCE_GROUP} \
+                        --docker-custom-image-name ${ACR_LOGIN_SERVER}/${DOCKER_IMAGE_NAME}:latest \
+                        --docker-registry-server-url https://${ACR_LOGIN_SERVER} \
+                        --docker-registry-server-user ${ACR_USERNAME} \
+                        --docker-registry-server-password ${ACR_PASSWORD}
                     '''
                 }
             }
