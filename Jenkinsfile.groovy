@@ -9,7 +9,7 @@ pipeline {
         ACR_PASSWORD = credentials('ACR_Pass')  // ACR password stored in Jenkins credentials
         DOCKER_IMAGE_NAME = "mydocker-repo"  // Name of your Docker image
         GITHUB_REPO = "https://github.com/Abel-Dagnew/Jenkins-project.git"  // GitHub repository URL
-        DOCKER_CREDENTIALS_ID = credentials('Docker_PAT')
+        // DOCKER_CREDENTIALS_ID = credentials('Docker_PAT')
         DOCKER_USERNAME = "abel13"
         AZURE_WEB_APP_NAME = "Abel-Container234" // Azure Web App name
         AZURE_RESOURCE_GROUP = "Abel-Container234_group" // Azure Resource Group where Web App resides
