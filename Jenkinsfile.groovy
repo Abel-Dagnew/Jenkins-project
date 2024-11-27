@@ -22,7 +22,7 @@ pipeline {
                     sh '''
                     if ! command -v az &> /dev/null; then
                         echo "Azure CLI not found, installing..."
-                        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+                        curl -sL https://aka.ms/InstallAzureCLIDeb | bash
                     else
                         echo "Azure CLI is already installed"
                     fi
