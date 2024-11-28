@@ -18,14 +18,14 @@ pipeline {
     stages {
         stage('Install Azure CLI') {
             steps {
-                container('azcli') {
+            
                     sh '''
                     apt-get update
                     apt-get install -y curl apt-transport-https
                     curl -sL https://aka.ms/InstallAzureCLIDeb | bash
                     az --version
                     '''
-                }
+                
             }
         }
         stage('Login to Azure') {
