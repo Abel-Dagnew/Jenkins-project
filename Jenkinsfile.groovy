@@ -1,19 +1,5 @@
 pipeline {
-    agent {
-        kubernetes {
-            yaml """
-            apiVersion: v1
-            kind: Pod
-            spec:
-              containers:
-              - name: azcli
-                image: mcr.microsoft.com/azure-cli:latest
-                command:
-                - cat
-                tty: true
-            """
-        }
-    }
+    agent any
 
     environment {
         // Azure container registry details
@@ -30,18 +16,7 @@ pipeline {
     }
 
     stages {
-        stage('Install Azure CLI') {
-            steps {
-                container('azcli') {
-                    sh '''
-                    apt-get update
-                    apt-get install -y curl apt-transport-https
-                    curl -sL https://aka.ms/InstallAzureCLIDeb | bash
-                    az --version
-                    '''
-                }
-            }
-        }
+        
         stage('Login to Azure') {
             steps {
                 script {
@@ -52,11 +27,13 @@ pipeline {
                         string(credentialsId: 'ARM_TENANT_ID', variable: 'AZURE_TENANT_ID'),
                         string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'AZURE_SUBSCRIPTION_ID')
                     ]) {
-                        // Logging in to Azure using the Service Principal credentials
-                        sh '''
-                            az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-                            az account set --subscription $AZURE_SUBSCRIPTION_ID
-                        '''
+                        azureCLI(
+                        
+                        script: "az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+                            az account set --subscription $AZURE_SUBSCRIPTION_ID"
+                        
+                        )
+                       
                     }
                 }
             }
@@ -65,6 +42,7 @@ pipeline {
         stage('Login to ACR') {
             steps {
                 script {
+                    
                     // Log in to Azure Container Registry using username and password
                     sh '''
                         echo ${ACR_PASSWORD} | docker login ${ACR_LOGIN_SERVER} --username ${ACR_USERNAME} --password-stdin
