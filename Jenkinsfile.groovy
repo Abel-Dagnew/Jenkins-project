@@ -1,5 +1,19 @@
 pipeline {
-    agent any
+    agent {
+        kubernetes {
+            yaml """
+            apiVersion: v1
+            kind: Pod
+            spec:
+              containers:
+              - name: azcli
+                image: mcr.microsoft.com/azure-cli:latest
+                command:
+                - cat
+                tty: true
+            """
+        }
+    }
 
     environment {
         // Azure container registry details
@@ -18,14 +32,14 @@ pipeline {
     stages {
         stage('Install Azure CLI') {
             steps {
-            
+                container('azcli') {
                     sh '''
                     apt-get update
                     apt-get install -y curl apt-transport-https
                     curl -sL https://aka.ms/InstallAzureCLIDeb | bash
                     az --version
                     '''
-                
+                }
             }
         }
         stage('Login to Azure') {
