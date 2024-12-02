@@ -1,9 +1,5 @@
 pipeline {
-    agent {
-        node {
-            label 'Built-In Node'  // Name of the node/agent
-        }
-    }
+    agent any
 
     environment {
         // Azure container registry details
