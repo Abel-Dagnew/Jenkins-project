@@ -34,25 +34,22 @@ pipeline {
         ACR_PASSWORD = credentials('ACR_Pass')  // ACR password stored in Jenkins credentials
         DOCKER_IMAGE_NAME = "mydocker-repo"  // Name of your Docker image
         GITHUB_REPO = "https://github.com/Abel-Dagnew/Jenkins-project.git"  // GitHub repository URL
-        // DOCKER_CREDENTIALS_ID = credentials('Docker_PAT')
         DOCKER_USERNAME = "abel13"
         AZURE_WEB_APP_NAME = "Abel-Container234" // Azure Web App name
         AZURE_RESOURCE_GROUP = "Abel-Container234_group" // Azure Resource Group where Web App resides
     }
 
     stages {
-        
+
         stage('Login to Azure') {
             steps {
                 script {
-                    // Use withCredentials to inject the Azure Service Principal credentials
                     withCredentials([ 
                         string(credentialsId: 'ARM_CLIENT_ID', variable: 'AZURE_CLIENT_ID'),
                         string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'AZURE_CLIENT_SECRET'),
                         string(credentialsId: 'ARM_TENANT_ID', variable: 'AZURE_TENANT_ID'),
                         string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'AZURE_SUBSCRIPTION_ID')
                     ]) {
-                        
                         // Logging in to Azure using the Service Principal credentials
                         sh '''
                             az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
@@ -66,7 +63,6 @@ pipeline {
         stage('Login to ACR') {
             steps {
                 script {
-                    
                     // Log in to Azure Container Registry using username and password
                     sh '''
                         echo ${ACR_PASSWORD} | docker login ${ACR_LOGIN_SERVER} --username ${ACR_USERNAME} --password-stdin
@@ -78,6 +74,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
+                    // Build Docker image
                     sh "docker build -t ${ACR_NAME}/${DOCKER_IMAGE_NAME}:latest ."
                 }
             }
@@ -86,7 +83,7 @@ pipeline {
         stage('List Docker Images') {
             steps {
                 script {
-                    // List images to verify the image tag exists
+                    // List Docker images to verify the image tag exists
                     sh 'docker images'
                 }
             }
@@ -95,7 +92,7 @@ pipeline {
         stage('Tag Docker Image') {
             steps {
                 script {
-                    // Tag the image for Azure Container Registry
+                    // Tag the Docker image for Azure Container Registry
                     sh "docker tag ${ACR_NAME}/${DOCKER_IMAGE_NAME}:latest ${ACR_LOGIN_SERVER}/${DOCKER_IMAGE_NAME}:latest"
                 }
             }
@@ -111,7 +108,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Pull Image to Web App') {
             steps {
                 script {
@@ -128,5 +125,4 @@ pipeline {
             }
         }
     }
-
 }
