@@ -1,5 +1,30 @@
 pipeline {
-    agent any
+    agent {
+        kubernetes {
+            yaml """
+            apiVersion: v1
+            kind: Pod
+            spec:
+              containers:
+              - name: docker
+                image: docker:stable-dind
+                securityContext:
+                  privileged: true
+                volumeMounts:
+                - name: docker-socket
+                  mountPath: /var/run/docker.sock
+              - name: azure-cli
+                image: mcr.microsoft.com/azure-cli
+                command:
+                - cat
+                tty: true
+              volumes:
+              - name: docker-socket
+                hostPath:
+                  path: /var/run/docker.sock
+            """
+        }
+    }
 
     environment {
         // Azure container registry details
@@ -17,26 +42,26 @@ pipeline {
 
     stages {
         
-        // stage('Login to Azure') {
-        //     steps {
-        //         script {
-        //             // Use withCredentials to inject the Azure Service Principal credentials
-        //             withCredentials([ 
-        //                 string(credentialsId: 'ARM_CLIENT_ID', variable: 'AZURE_CLIENT_ID'),
-        //                 string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'AZURE_CLIENT_SECRET'),
-        //                 string(credentialsId: 'ARM_TENANT_ID', variable: 'AZURE_TENANT_ID'),
-        //                 string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'AZURE_SUBSCRIPTION_ID')
-        //             ]) {
+        stage('Login to Azure') {
+            steps {
+                script {
+                    // Use withCredentials to inject the Azure Service Principal credentials
+                    withCredentials([ 
+                        string(credentialsId: 'ARM_CLIENT_ID', variable: 'AZURE_CLIENT_ID'),
+                        string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'AZURE_CLIENT_SECRET'),
+                        string(credentialsId: 'ARM_TENANT_ID', variable: 'AZURE_TENANT_ID'),
+                        string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'AZURE_SUBSCRIPTION_ID')
+                    ]) {
                         
-        //                 // Logging in to Azure using the Service Principal credentials
-        //                 sh '''
-        //                     az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-        //                     az account set --subscription $AZURE_SUBSCRIPTION_ID
-        //                 '''
-        //             }
-        //         }
-        //     }
-        // }
+                        // Logging in to Azure using the Service Principal credentials
+                        sh '''
+                            az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+                            az account set --subscription $AZURE_SUBSCRIPTION_ID
+                        '''
+                    }
+                }
+            }
+        }
 
         stage('Login to ACR') {
             steps {
