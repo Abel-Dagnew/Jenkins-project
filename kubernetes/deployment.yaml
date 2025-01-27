@@ -17,4 +17,4 @@ spec:
       - name: my-app
         image: abelregistryy.azurecr.io/mydocker-repo:latest
         ports:
-        - containerPort: 80
+        - containerPort: 3000  # Updated to match the container's listening port
