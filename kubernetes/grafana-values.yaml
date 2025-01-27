@@ -1,11 +1,9 @@
-# grafana-values.yaml
-
 # Configure default data source as Prometheus
 datasources:
   default:
     name: Prometheus
     type: prometheus
-    url: http://prometheus-server.myproject.svc.cluster.local  # Update with your Prometheus service URL
+    url: http://prometheus-server.myproject.svc.cluster.local  # Ensure this is the correct Prometheus service URL
     access: proxy
     isDefault: true
 
@@ -13,15 +11,18 @@ datasources:
 dashboards:
   default:
     my-dashboard:
-      gnetId: 18283  # Replace with the Grafana dashboard ID for your app
+      gnetId: 18283  # Replace with the Grafana dashboard ID you want to import
       revision: 1
       datasource: Prometheus
 
 # Admin password (optional)
-adminPassword: "1234"
+adminPassword: "your-secure-password-here"  # Set a strong password for security
 
-# Service
+# Service configuration to expose Grafana externally
 service:
-  type: LoadBalancer  # Set this to LoadBalancer
-  port: 80            # Port you want to expose
-
+  type: LoadBalancer  # This exposes Grafana to the internet
+  port: 80            # Port to expose Grafana on
+  targetPort: 3000    # The internal port Grafana is listening on (default is 3000)
+  # If you want to restrict access to certain IPs, you can add `loadBalancerSourceRanges`:
+  # loadBalancerSourceRanges:
+  #   - 0.0.0.0/0  # Allow access from all IPs (adjust as needed)

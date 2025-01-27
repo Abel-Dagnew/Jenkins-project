@@ -1,11 +1,9 @@
-# prometheus-values.yaml
-
 # Enable persistent storage for Prometheus
 prometheus:
   persistentVolume:
     enabled: true
     size: 8Gi
-    storageClass: standard  # Specify your storage class
+    storageClass: standard  # Specify your storage class (adjust as needed)
     accessMode: ReadWriteOnce
 
 # Configure scraping for your application
@@ -19,7 +17,8 @@ scrape_configs:
         target_label: instance
         replacement: 'my-app-instance'  # Optional, customize the label
 
-# Service
+# Service configuration to expose Prometheus externally
 service:
   type: LoadBalancer  # Set this to LoadBalancer
-  port: 80            # Port you want to expose
+  port: 80            # Port you want to expose Prometheus on
+  targetPort: 9090     # Default Prometheus port (if you're using the default port)
