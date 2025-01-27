@@ -129,7 +129,7 @@ pipeline {
                     sh '''
                         helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
                         helm repo update
-                        helm upgrade --install prometheus prometheus-community/prometheus --namespace ${NAMESPACE} -f prometheus-values.yaml
+                        helm upgrade --install prometheus prometheus-community/prometheus --namespace ${NAMESPACE} -f kubernetes/prometheus-values.yaml
                     '''
                 }
             }
@@ -141,7 +141,7 @@ pipeline {
                     sh '''
                         helm repo add grafana https://grafana.github.io/helm-charts
                         helm repo update
-                        helm upgrade --install grafana grafana/grafana --namespace ${NAMESPACE} -f grafana-values.yaml
+                        helm upgrade --install grafana grafana/grafana --namespace ${NAMESPACE} -f kubernetes/grafana-values.yaml
                     '''
                 }
             }
