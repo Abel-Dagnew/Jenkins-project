@@ -1,0 +1,22 @@
+# prometheus-values.yaml
+
+# Enable persistent storage for Prometheus
+prometheus:
+  persistentVolume:
+    enabled: true
+    size: 8Gi
+    storageClass: standard  # Specify your storage class
+    accessMode: ReadWriteOnce
+
+# Configure scraping for your application
+scrape_configs:
+  - job_name: 'my-app'
+    static_configs:
+      - targets: ['74.248.80.188:80']  # Use the LoadBalancer IP and port
+    metrics_path: /metrics  # Assuming your app exposes Prometheus metrics at /metrics
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'my-app-instance'  # Optional, customize the label
+
+

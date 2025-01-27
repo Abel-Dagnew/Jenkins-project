@@ -12,6 +12,7 @@ pipeline {
         DOCKER_USERNAME = "abel13"
         AZURE_WEB_APP_NAME = "Abel-Container234" // Azure Web App name
         AZURE_RESOURCE_GROUP = "Abel-Container234_group" // Azure Resource Group where Web App resides
+        NAMESPACE = "myproject"
     }
 
     stages {
@@ -118,6 +119,30 @@ pipeline {
                         '''
 }
 
+                }
+            }
+        }
+        stage('Deploy Prometheus') {
+            steps {
+                script {
+                    // Deploy Prometheus using Helm
+                    sh '''
+                        helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+                        helm repo update
+                        helm upgrade --install prometheus prometheus-community/prometheus --namespace ${NAMESPACE} -f prometheus-values.yaml
+                    '''
+                }
+            }
+        }
+        stage('Deploy Grafana') {
+            steps {
+                script {
+                    // Deploy Grafana using Helm
+                    sh '''
+                        helm repo add grafana https://grafana.github.io/helm-charts
+                        helm repo update
+                        helm upgrade --install grafana grafana/grafana --namespace ${NAMESPACE} -f grafana-values.yaml
+                    '''
                 }
             }
         }

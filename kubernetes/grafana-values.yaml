@@ -1,0 +1,21 @@
+# grafana-values.yaml
+
+# Configure default data source as Prometheus
+datasources:
+  default:
+    name: Prometheus
+    type: prometheus
+    url: http://prometheus-server.myproject.svc.cluster.local  # Update with your Prometheus service URL
+    access: proxy
+    isDefault: true
+
+# Set the initial dashboards to be imported (optional)
+dashboards:
+  default:
+    my-dashboard:
+      gnetId: 18283  # Replace with the Grafana dashboard ID for your app
+      revision: 1
+      datasource: Prometheus
+
+# Admin password (optional)
+adminPassword: "1234"
