@@ -1,30 +1,5 @@
 pipeline {
-    agent {
-        kubernetes {
-            yaml """
-            apiVersion: v1
-            kind: Pod
-            spec:
-              containers:
-              - name: docker
-                image: docker:stable-dind
-                securityContext:
-                  privileged: true
-                volumeMounts:
-                - name: docker-socket
-                  mountPath: /var/run/docker.sock
-              - name: azure-cli
-                image: mcr.microsoft.com/azure-cli
-                command:
-                - cat
-                tty: true
-              volumes:
-              - name: docker-socket
-                hostPath:
-                  path: /var/run/docker.sock
-            """
-        }
-    }
+    agent any
 
     environment {
         // Azure container registry details
