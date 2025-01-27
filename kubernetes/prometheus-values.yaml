@@ -19,4 +19,7 @@ scrape_configs:
         target_label: instance
         replacement: 'my-app-instance'  # Optional, customize the label
 
-
+# Service
+service:
+  type: LoadBalancer  # Set this to LoadBalancer
+  port: 80            # Port you want to expose

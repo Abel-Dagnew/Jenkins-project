@@ -19,3 +19,9 @@ dashboards:
 
 # Admin password (optional)
 adminPassword: "1234"
+
+# Service
+service:
+  type: LoadBalancer  # Set this to LoadBalancer
+  port: 80            # Port you want to expose
+
