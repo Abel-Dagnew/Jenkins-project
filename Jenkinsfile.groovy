@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Azure container registry details
-        ACR_NAME = "abelregistryy"  // Your ACR name
+        ACR_NAME = "abelregistryy"  // Your ACR nam
         ACR_LOGIN_SERVER = "${ACR_NAME}.azurecr.io"  // ACR login server URL
         ACR_USERNAME = "abelregistryy"  // ACR username
         ACR_PASSWORD = credentials('ACR_Pass')  // ACR password stored in Jenkins credentials
@@ -122,30 +122,30 @@ pipeline {
                 }
             }
         }
-        stage('Deploy Prometheus') {
-            steps {
-                script {
-                    // Deploy Prometheus using Helm
-                    sh '''
-                        helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-                        helm repo update
-                        helm upgrade --install prometheus prometheus-community/prometheus --namespace ${NAMESPACE} -f kubernetes/prometheus-values.yaml
-                    '''
-                }
-            }
-        }
-        stage('Deploy Grafana') {
-            steps {
-                script {
-                    // Deploy Grafana using Helm
-                    sh '''
-                        helm repo add grafana https://grafana.github.io/helm-charts
-                        helm repo update
-                        helm upgrade --install grafana grafana/grafana --namespace ${NAMESPACE} -f kubernetes/grafana-values.yaml
-                    '''
-                }
-            }
-        }
+        // stage('Deploy Prometheus') {
+        //     steps {
+        //         script {
+        //             // Deploy Prometheus using Helm
+        //             sh '''
+        //                 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+        //                 helm repo update
+        //                 helm upgrade --install prometheus prometheus-community/prometheus --namespace ${NAMESPACE} -f kubernetes/prometheus-values.yaml
+        //             '''
+        //         }
+        //     }
+        // }
+        // stage('Deploy Grafana') {
+        //     steps {
+        //         script {
+        //             // Deploy Grafana using Helm
+        //             sh '''
+        //                 helm repo add grafana https://grafana.github.io/helm-charts
+        //                 helm repo update
+        //                 helm upgrade --install grafana grafana/grafana --namespace ${NAMESPACE} -f kubernetes/grafana-values.yaml
+        //             '''
+        //         }
+        //     }
+        // }
     }
     post {
         always {
