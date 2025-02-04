@@ -28,112 +28,36 @@ pipeline {
 
         stage('Login to ACR') {
             steps {
-                script {
-                    // Log in to Azure Container Registry using username and password
-                    sh '''
-                        echo ${ACR_PASSWORD} | docker login ${ACR_LOGIN_SERVER} --username ${ACR_USERNAME} --password-stdin
-                    '''
-                }
+                ACRLogin() // Call the shared library function
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build And Push Docker Image') {
             steps {
-                script {
-                    // Build Docker image
-                    sh "docker build -t ${ACR_NAME}/${DOCKER_IMAGE_NAME}:latest ."
-                }
+                BuildPushDockerImage() // Call the shared library function
             }
         }
 
-        stage('List Docker Images') {
-            steps {
-                script {
-                    // List Docker images to verify the image tag exists
-                    sh 'docker images'
-                }
-            }
-        }
-
-        stage('Tag Docker Image') {
-            steps {
-                script {
-                    // Tag the Docker image for Azure Container Registry
-                    sh "docker tag ${ACR_NAME}/${DOCKER_IMAGE_NAME}:latest ${ACR_LOGIN_SERVER}/${DOCKER_IMAGE_NAME}:latest"
-                }
-            }
-        }
-
-        stage('Push Docker Image to ACR') {
-            steps {
-                script {
-                    // Push the Docker image to Azure Container Registry
-                    sh '''
-                        docker push ${ACR_LOGIN_SERVER}/${DOCKER_IMAGE_NAME}:latest
-                    '''
-                }
-            }
-        }
+        
 
         // stage('Pull Image to Web App') {
         //     steps {
-        //         script {
-        //             // Configure Azure Web App to use the latest image from ACR
-        //             sh '''
-        //                 az webapp config container set --name ${AZURE_WEB_APP_NAME} \
-        //                 --resource-group ${AZURE_RESOURCE_GROUP} \
-        //                 --docker-custom-image-name ${ACR_LOGIN_SERVER}/${DOCKER_IMAGE_NAME}:latest \
-        //                 --docker-registry-server-url https://${ACR_LOGIN_SERVER} \
-        //                 --docker-registry-server-user ${ACR_USERNAME} \
-        //                 --docker-registry-server-password ${ACR_PASSWORD}
-        //             '''
-        //         }
+        //         PullImageToWebApp() // Call the shared library function
         //     }
         // }
         stage('Deploy to AKS') {
             steps {
-                script {
-                    // Use kubeconfig from Jenkins credentials
-                    withCredentials([ 
-                        string(credentialsId: 'ARM_CLIENT_ID', variable: 'AZURE_CLIENT_ID'),
-                        string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'AZURE_CLIENT_SECRET'),
-                        string(credentialsId: 'ARM_TENANT_ID', variable: 'AZURE_TENANT_ID'),
-                        string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'AZURE_SUBSCRIPTION_ID')
-                    ]) {
-                        sh '''
-                            az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-                            az aks get-credentials --resource-group Abel-AKS-rg --name My-AKS-00 --admin
-                            kubectl apply -f kubernetes/deployment.yaml
-                            kubectl apply -f kubernetes/service.yaml
-
-                        '''
-}
-
-                }
+                DeployToAKS() // Call the shared library function
             }
-        }
+        // }
         // stage('Deploy Prometheus') {
         //     steps {
-        //         script {
-        //             // Deploy Prometheus using Helm
-        //             sh '''
-        //                 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-        //                 helm repo update
-        //                 helm upgrade --install prometheus prometheus-community/prometheus --namespace ${NAMESPACE} -f kubernetes/prometheus-values.yaml
-        //             '''
-        //         }
+        //         DeployPrometheus()
         //     }
         // }
         // stage('Deploy Grafana') {
         //     steps {
-        //         script {
-        //             // Deploy Grafana using Helm
-        //             sh '''
-        //                 helm repo add grafana https://grafana.github.io/helm-charts
-        //                 helm repo update
-        //                 helm upgrade --install grafana grafana/grafana --namespace ${NAMESPACE} -f kubernetes/grafana-values.yaml
-        //             '''
-        //         }
+        //         DeployGrafana()
         //     }
         // }
     }
