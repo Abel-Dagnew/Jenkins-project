@@ -34,7 +34,7 @@ pipeline {
 
         stage('Build And Push Docker Image') {
             steps {
-                BuildPushDockerImage() // Call the shared library function
+                BuildPushDockerImage(ACR_NAME, DOCKER_IMAGE_NAME, ACR_LOGIN_SERVER) // Call the shared library function
             }
         }
 
@@ -42,7 +42,7 @@ pipeline {
 
         // stage('Pull Image to Web App') {
         //     steps {
-        //         PullImageToWebApp() // Call the shared library function
+        //         PullImageToWebApp(AZURE_WEB_APP_NAME, AZURE_RESOURCE_GROUP, ACR_LOGIN_SERVER,DOCKER_IMAGE_NAME, ACR_USERNAME,ACR_PASSWORD ) // Call the shared library function
         //     }
         // }
         stage('Deploy to AKS') {
@@ -52,12 +52,12 @@ pipeline {
         // }
         // stage('Deploy Prometheus') {
         //     steps {
-        //         DeployPrometheus()
+        //         DeployPrometheus(NAMESPACE)
         //     }
         // }
         // stage('Deploy Grafana') {
         //     steps {
-        //         DeployGrafana()
+        //         DeployGrafana(NAMESPACE)
         //     }
         // }
     }
