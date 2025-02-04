@@ -28,7 +28,7 @@ pipeline {
 
         stage('Login to ACR') {
             steps {
-                ACRLogin() // Call the shared library function
+                ACRLogin(ACR_PASSWORD, ACR_LOGIN_SERVER, ACR_USERNAME) // Call the shared library function
             }
         }
 
