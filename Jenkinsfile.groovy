@@ -34,7 +34,10 @@ pipeline {
 
         stage('Build And Push Docker Image') {
             steps {
-                BuildPushDockerImage(ACR_NAME, DOCKER_IMAGE_NAME, ACR_LOGIN_SERVER) // Call the shared library function
+               script {
+            // Call the shared library function and invoke the returned closure
+            BuildPushDockerImage(ACR_NAME, DOCKER_IMAGE_NAME, ACR_LOGIN_SERVER)()
+                }
             }
         }
 
