@@ -22,7 +22,7 @@ pipeline {
 
         stage('Login to Azure') {
             steps {
-                azure-login()  // Call the shared library function
+                azureLogin()  // Call the shared library function
             }
         }
 
