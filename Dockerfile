@@ -2,7 +2,7 @@
 FROM node:22
 
 # Set the working directory in the container
-WORKDIR /usr/src/app
+WORKDIR /usr/src/gofer-app
 
 # Copy package.json and package-lock.json (if available)
 COPY ./gofer-app/package*.json ./
