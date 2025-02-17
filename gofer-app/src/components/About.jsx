@@ -40,7 +40,7 @@ const About = () => {
       <div className="lg:w-1/2 text-left px-8 space-y-6">
         <h2 className="text-5xl font-extrabold text-gray-800">About Us</h2>
         <p className="mt-4 text-xl text-gray-700 leading-relaxed">
-          Fejlesztő Technology Plc, founded in 2012, is a professional IT company that offers web design, SEO, software development, and IT services. We aim to push the limits of creativity and deliver high-quality work with fast turnaround times.
+          Gofer Technology Plc, founded in 2012, is a professional IT company that offers web design, SEO, software development, and IT services. We aim to push the limits of creativity and deliver high-quality work with fast turnaround times.
         </p>
       </div>
 

@@ -12,21 +12,21 @@ const Navbar = () => {
 
   return (
     <nav className="bg-gray-50 shadow-md fixed w-full z-11">
-      <div className="px-6 sm:px-8 lg:px-10 flex justify-between items-center h-26">
+      <div className="px-6 sm:px-8 lg:px-10 flex justify-between items-center h-15">
         {/* Logo Aligned to the Left Edge */}
         <Link to="/" className="ml-40">
-          <img src={logo} alt="Gofer Technologies Logo" className="h-15 w-auto" />
+          <img src={logo} alt="Gofer Technologies Logo" className="h-10 w-auto" />
         </Link>
 
         {/* Centered Menu Links (for Desktop) */}
-        <div className="hidden md:flex items-center justify-center space-x-12 flex-grow">
-          <Link to="/" className={`text-2xl font-semibold transition duration-200 ${location.pathname === '/' ? 'text-indigo-600' : 'text-gray-800 hover:text-indigo-600'}`}>Home</Link>
-          <Link to="/services" className={`text-2xl font-semibold transition duration-200 ${location.pathname === '/services' ? 'text-indigo-600' : 'text-gray-800 hover:text-indigo-600'}`}>Services</Link>
-          <Link to="/projects" className={`text-2xl font-semibold transition duration-200 ${location.pathname === '/projects' ? 'text-indigo-600' : 'text-gray-800 hover:text-indigo-600'}`}>Projects</Link>
-          <Link to="/about" className={`text-2xl font-semibold transition duration-200 ${location.pathname === '/about' ? 'text-indigo-600' : 'text-gray-800 hover:text-indigo-600'}`}>About</Link>
-          <Link to="/blogs" className={`text-2xl font-semibold transition duration-200 ${location.pathname === '/blogs' ? 'text-indigo-600' : 'text-gray-800 hover:text-indigo-600'}`}>Blogs</Link>
-          <Link to="/testimonials" className={`text-2xl font-semibold transition duration-200 ${location.pathname === '/testimonials' ? 'text-indigo-600' : 'text-gray-800 hover:text-indigo-600'}`}>Testimonials</Link>
-          <Link to="/contact" className={`text-2xl font-semibold transition duration-200 ${location.pathname === '/contact' ? 'text-indigo-600' : 'text-gray-800 hover:text-indigo-600'}`}>Contact</Link>
+        <div className="hidden md:flex items-center justify-center space-x-5 flex-grow">
+          <Link to="/" className={`text-lg font-semibold transition duration-200 ${location.pathname === '/' ? 'text-indigo-600' : 'text-gray-800 hover:text-indigo-600'}`}>Home</Link>
+          <Link to="/services" className={`text-lg font-semibold transition duration-200 ${location.pathname === '/services' ? 'text-indigo-600' : 'text-gray-800 hover:text-indigo-600'}`}>Services</Link>
+          <Link to="/projects" className={`text-lg font-semibold transition duration-200 ${location.pathname === '/projects' ? 'text-indigo-600' : 'text-gray-800 hover:text-indigo-600'}`}>Projects</Link>
+          <Link to="/about" className={`text-lg font-semibold transition duration-200 ${location.pathname === '/about' ? 'text-indigo-600' : 'text-gray-800 hover:text-indigo-600'}`}>About</Link>
+          <Link to="/blogs" className={`text-lg font-semibold transition duration-200 ${location.pathname === '/blogs' ? 'text-indigo-600' : 'text-gray-800 hover:text-indigo-600'}`}>Blogs</Link>
+          <Link to="/testimonials" className={`text-lg font-semibold transition duration-200 ${location.pathname === '/testimonials' ? 'text-indigo-600' : 'text-gray-800 hover:text-indigo-600'}`}>Testimonials</Link>
+          <Link to="/contact" className={`text-lg font-semibold transition duration-200 ${location.pathname === '/contact' ? 'text-indigo-600' : 'text-gray-800 hover:text-indigo-600'}`}>Contact</Link>
         </div>
 
         {/* Mobile Menu Button */}
