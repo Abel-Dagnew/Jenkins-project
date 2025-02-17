@@ -1,20 +1,30 @@
-# Use the official Node.js image as the base image
-FROM node:22
+# Step 1: Build the Vite App
+FROM node:22 AS builder
 
-# Set the working directory in the container
+# Set the working directory
 WORKDIR /usr/src/gofer-app
 
-# Copy package.json and package-lock.json (if available)
+# Copy package.json and install dependencies
 COPY ./gofer-app/package*.json ./
-
-# Install dependencies
 RUN npm install
 
-# Copy the rest of your application code
+# Copy the entire project
 COPY ./gofer-app .
 
-# Expose the port the app runs on
-EXPOSE 3000
+# Build the Vite app (this generates the "dist" folder)
+RUN npm run build
 
-# Command to run the application
-CMD ["node", "gofer-app.js"]
+# Step 2: Serve with Nginx
+FROM nginx:alpine
+
+# Remove default Nginx website config
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copy built files from "builder" stage
+COPY --from=builder /usr/src/gofer-app/dist /usr/share/nginx/html
+
+# Expose the web server port
+EXPOSE 80
+
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
