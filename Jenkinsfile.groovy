@@ -10,7 +10,7 @@ pipeline {
         ACR_LOGIN_SERVER = "${ACR_NAME}.azurecr.io"  // ACR login server URL
         ACR_USERNAME = "abelregistryy"  // ACR username
         ACR_PASSWORD = credentials('ACR_Pass')  // ACR password stored in Jenkins credentials
-        DOCKER_IMAGE_NAME = "gofer-app-docker-repo"  // Name of your Docker image
+        DOCKER_IMAGE_NAME = "invoice-sql"  // Name of your Docker image
         GITHUB_REPO = "https://github.com/Abel-Dagnew/Jenkins-project.git"  // GitHub repository URL
         DOCKER_USERNAME = "abel13"
         AZURE_WEB_APP_NAME = "gofe-project" // Azure Web App name
@@ -43,11 +43,11 @@ pipeline {
 
         
 
-        stage('Pull Image to Web App') {
-            steps {
-                PullImageToWebApp(AZURE_WEB_APP_NAME, AZURE_RESOURCE_GROUP, ACR_LOGIN_SERVER,DOCKER_IMAGE_NAME, ACR_USERNAME,ACR_PASSWORD ) // Call the shared library function
-            }
-        }
+        // stage('Pull Image to Web App') {
+        //     steps {
+        //         PullImageToWebApp(AZURE_WEB_APP_NAME, AZURE_RESOURCE_GROUP, ACR_LOGIN_SERVER,DOCKER_IMAGE_NAME, ACR_USERNAME,ACR_PASSWORD ) // Call the shared library function
+        //     }
+        // }
     //     stage('Deploy to AKS') {
     //         steps {
     //             DeployToAKS() // Call the shared library function
