@@ -31,14 +31,21 @@
 
 
 
-# Use the official PostgreSQL image from the Docker Hub
-FROM postgres:latest
+# Use official PostgreSQL image
+FROM postgres:17.4
 
-# Set environment variables for the database
-ENV POSTGRES_USER=myuser
-ENV POSTGRES_PASSWORD=mypassword
-ENV POSTGRES_DB=mydatabase
+# Set default environment variables (these can be overridden in Azure App Service)
+ENV POSTGRES_USER=admin
+ENV POSTGRES_PASSWORD=yourpassword
+ENV POSTGRES_DB=mydb
 
-# Expose the default PostgreSQL port
+# Ensure PostgreSQL stores data in the mounted Azure File Share
+VOLUME ["/var/lib/postgresql/data"]
+
+# Expose PostgreSQL port
 EXPOSE 5432
+
+# Start PostgreSQL
+CMD ["postgres"]
+
 
