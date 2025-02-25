@@ -32,7 +32,7 @@
 
 
 # Use official PostgreSQL image
-FROM postgres:17.4
+FROM postgres:latest
 
 # Set default environment variables (these can be overridden in Azure App Service)
 ENV POSTGRES_USER=admin
@@ -45,7 +45,8 @@ VOLUME ["/var/lib/postgresql/data"]
 # Expose PostgreSQL port
 EXPOSE 5432
 
-# Start PostgreSQL
+# Run PostgreSQL server
 CMD ["postgres"]
+
 
 
