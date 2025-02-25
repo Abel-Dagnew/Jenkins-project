@@ -34,8 +34,6 @@
 # Example Dockerfile
 FROM postgres:latest
 
-# Copy SQL file with a shorter name
-COPY init.sql /docker-entrypoint-initdb.d/
 
 # Set environment variables
 ENV POSTGRES_USER=admin
