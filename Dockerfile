@@ -31,19 +31,23 @@
 
 
 
-# Use official PostgreSQL image
-FROM postgres:13.4
+# Example Dockerfile
+FROM postgres:latest
 
-# Set default environment variables (these can be overridden in Azure App Service)
+# Copy SQL file with a shorter name
+COPY init.sql /docker-entrypoint-initdb.d/
+
+# Set environment variables
 ENV POSTGRES_USER=admin
 ENV POSTGRES_PASSWORD=yourpassword
 ENV POSTGRES_DB=mydb
 
-# Ensure PostgreSQL stores data in the mounted Azure File Share
-VOLUME ["/var/lib/postgresql/data"]
-
 # Expose PostgreSQL port
 EXPOSE 5432
+
+# Start PostgreSQL
+CMD ["postgres"]
+
 
 # Run PostgreSQL server
 CMD ["postgres"]
