@@ -32,7 +32,7 @@
 
 
 # Use official PostgreSQL image
-FROM postgres:latest
+FROM postgres:13.4
 
 # Set default environment variables (these can be overridden in Azure App Service)
 ENV POSTGRES_USER=admin
