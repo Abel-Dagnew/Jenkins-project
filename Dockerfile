@@ -31,23 +31,20 @@
 
 
 
-# Use official PostgreSQL image
+# Example Dockerfile
 FROM postgres:latest
+
 
 # Set environment variables
 ENV POSTGRES_USER=admin
 ENV POSTGRES_PASSWORD=yourpassword
 ENV POSTGRES_DB=mydb
 
-# Ensure PostgreSQL listens on all network interfaces (0.0.0.0)
-COPY ./postgresql.conf /etc/postgresql/postgresql.conf
-
 # Expose PostgreSQL port
 EXPOSE 5432
 
-# Command to start PostgreSQL with the custom configuration file
-CMD ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
-
+# Start PostgreSQL
+CMD ["postgres"]
 
 
 
